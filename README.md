@@ -111,6 +111,7 @@ Has full fledged support for user login and sign up.  Filter and sort your tasks
     "success": "Logged out successfully!"
 }
 ```
+- If failure, a *500 response* is returned.
 - No request modifications/attachments are required.
 - The JWT used for logging out can now ***not be used*** for acccessing secure routes in the future.
 
@@ -119,6 +120,8 @@ Has full fledged support for user login and sign up.  Filter and sort your tasks
 *Secure Route*
 
 - Will logout the user from it's current session and from all the other sessions ,i.e. if a user has been using the app on multiple devices, by deleting the provided and all the other JWTs issued.
+- Will return a *200 response* along with the data similar to that returned in 3.
+- If failure, a *500 response* is returned.
 - No request modifications/attachments are required.
 - All the past JWTs can now ***not be used*** for acccessing secure routes in the future.
 
@@ -128,7 +131,6 @@ Has full fledged support for user login and sign up.  Filter and sort your tasks
 
 - If the request succeeds, the server will send back the MongoDB stored document of the user of the form :
 
-- A request failure can only indicate an internal server error i.e. the server might be under maintenance therefore a *500 response* is returned.
 ```
 {
     "age": 27,
@@ -140,6 +142,44 @@ Has full fledged support for user login and sign up.  Filter and sort your tasks
     "__v": 1
 }
 ```
+- A request failure can only indicate an internal server error i.e. the server might be under maintenance, therefore a *500 response* is returned.
+
+### 6. PATCH /users/me
+*User update endpoint* <br>
+*Secure Route*
+
+- Provide a JSON as the request's body following the example and descriptions given for User creation to replace the existing data with the newly provided data :
+```
+{
+	"name": "Jenny Doe",
+	"email": "jenny.doe@gmail.com",
+	"password": "ILikeDogs123"
+}
+```
+- Data not provided in the above request will be untouched/remain same.
+- Data validators will run again on the new data and if successful, a *200 response* is returned along with the newly updated document:
+```
+{
+    "age": 27,
+    "_id": "<MongoDB's User ID>",
+    "name": "Jenny Doe",
+    "email": "jenny.doe@gmail.com",
+    "createdAt": "2020-01-23T15:00:15.918Z",
+    "updatedAt": "2020-01-23T15:23:19.000Z",
+    "__v": 3
+}
+```
+- If the validators fail, a *400 response* is returned instead.
+
+### 7. DELETE /users/me
+*User delete endpoint* <br>
+*Secure Route*
+
+- Will delete the user from the database. Will also delete all his corresponding tasks and task data.
+- Upon successful deletion, a *200 response* will be returned by the app, along with the user document, similar to 6.
+- If failure, a *400 response* is returned.
+- No request modifications/attachments are required.
+- The JWT used for logging out can now ***not be used*** for acccessing secure routes in the future.
 
 
 
