@@ -16,12 +16,12 @@ const Task = require('./task');
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, 'Please enter your name'],
         trim: true
     },
     email: {
         type: String,
-        required: true,
+        required: [true, 'Please provide an email address'],
         unique: true,
         trim: true,
         lowercase: true,
